@@ -17,12 +17,15 @@ app.use(express.json());
 app.post('/vote', (req, res) => {
   const { name, answer } = req.body;
 
+  console.log(`Received vote - Name: ${name}, Answer: ${answer}`); // Debug log
+
   if (!name || !answer) {
     return res.status(400).json({ status: 'error', message: 'Missing name or answer' });
   }
 
   try {
     fs.appendFileSync('answer.txt', `${name}: ${answer}\n`);
+    console.log('Vote saved successfully');
     res.json({ status: 'ok' });
   } catch (err) {
     console.error('Error writing to answer.txt:', err);
@@ -71,7 +74,7 @@ app.post('/clear', (req, res) => {
   });
 });
 
-// Optional root route _just_ to verify server status (can be removed)
+// Optional root route to verify server status (can be removed)
 app.get('/', (req, res) => {
   res.send('RSVP backend server is running');
 });
